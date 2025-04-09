@@ -7,16 +7,24 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: sans-serif;
-      background-color: #fff0f5;
+      font-family: 'Arial', sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
       text-align: center;
       overflow: hidden;
+      height: 100vh;
     }
+
     h1 {
-      margin-top: 100px;
-      color: #e91e63;
+      margin-top: 20%;
+      color: #fff;
       font-size: 2.5em;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 20px;
+      border-radius: 15px;
+      animation: fadeIn 2s ease-in-out;
     }
+
     .btn {
       padding: 15px 30px;
       font-size: 1.2em;
@@ -25,43 +33,54 @@
       border-radius: 10px;
       cursor: pointer;
       transition: 0.3s;
+      z-index: 10;
+      position: relative;
     }
+
     #yes {
       background-color: #4caf50;
       color: white;
     }
+
     #no {
       background-color: #f44336;
       color: white;
       position: absolute;
     }
 
-    #fireworks {
+    #effects {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 999;
+      z-index: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-  <h1>Алтынай, давай начнём строить отношения?</h1>
+  <h1>Алтынай, давай начнём строить наше будущее вместе?</h1>
   <button class="btn" id="yes">Согласна</button>
   <button class="btn" id="no">Нет</button>
-
-  <canvas id="fireworks"></canvas>
-  <audio id="music" src="https://dl.dropboxusercontent.com/scl/fi/r4brsv1ax7y7jcf13xn6j/makan-kak-zhe.mp3?rlkey=hz53s2l7y5mx5j4cbz0afc6ad&dl=0"></audio>
+  <canvas id="effects"></canvas>
 
   <script>
     const noBtn = document.getElementById('no');
     const yesBtn = document.getElementById('yes');
-    const music = document.getElementById('music');
+    const canvas = document.getElementById('effects');
+    const ctx = canvas.getContext('2d');
 
-    // Убегающая кнопка
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // убегающая кнопка
     noBtn.addEventListener('mouseenter', () => {
       const x = Math.random() * (window.innerWidth - 100);
       const y = Math.random() * (window.innerHeight - 50);
@@ -69,37 +88,26 @@
       noBtn.style.top = `${y}px`;
     });
 
-    // Фейерверк
-    yesBtn.addEventListener('click', () => {
-      music.play();
-      startFireworks();
-    });
-
-    // Fireworks animation
-    const canvas = document.getElementById('fireworks');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
+    // фейерверк, сердечки и блестки
     let particles = [];
 
-    function startFireworks() {
+    yesBtn.addEventListener('click', () => {
       setInterval(() => {
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height / 2;
         createExplosion(x, y);
-      }, 500);
-    }
+      }, 400);
+    });
 
     function createExplosion(x, y) {
       for (let i = 0; i < 50; i++) {
         particles.push({
-          x: x,
-          y: y,
+          x,
+          y,
           dx: (Math.random() - 0.5) * 5,
           dy: (Math.random() - 0.5) * 5,
           life: 100,
-          color: `hsl(${Math.random() * 360}, 100%, 50%)`
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`
         });
       }
     }
@@ -114,7 +122,7 @@
         p.life--;
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
         ctx.fill();
 
